@@ -1,6 +1,7 @@
 using RabbitMQ.Client;
 using System;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Systemintegration.Messaging
 {
@@ -11,8 +12,8 @@ namespace Systemintegration.Messaging
         {
             _queueName = queueName;
         }
-        
-        public void SendMessage(string message)
+
+        public void SendMessage(object message)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
 
@@ -25,14 +26,14 @@ namespace Systemintegration.Messaging
                     autoDelete: false,
                     arguments: null);
 
-                var body = Encoding.UTF8.GetBytes(message);
+                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
                 channel.BasicPublish(exchange: "",
                     routingKey: _queueName,
                     basicProperties: null,
                     body: body);
 
-                Console.WriteLine(" [x] Sent {0}", message);
+                Console.WriteLine(" [x] Sent {0}", JsonConvert.SerializeObject(message));
             }
         }
     }

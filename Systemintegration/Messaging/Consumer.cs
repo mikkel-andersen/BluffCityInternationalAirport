@@ -2,7 +2,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Systemintegration.Messaging
 {
@@ -32,7 +32,8 @@ namespace Systemintegration.Messaging
                 {
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
+                    var deserializedMessage = JsonConvert.DeserializeObject<dynamic>(message);
+                    Console.WriteLine(" [x] Received {0}", JsonConvert.SerializeObject(deserializedMessage, Formatting.Indented));
                 };
                 channel.BasicConsume(queue: _queueName,
                     autoAck: true,

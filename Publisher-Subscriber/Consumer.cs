@@ -1,11 +1,11 @@
+
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-namespace Systemintegration.Messaging
+namespace ETA_Messages
 {
     public class Consumer
     {
@@ -40,12 +40,6 @@ namespace Systemintegration.Messaging
                 channel.BasicConsume(queue: _queueName,
                     autoAck: true,
                     consumer: consumer);
-
-                // Keep the application running
-                while (true)
-                {
-                    await Task.Delay(1000);
-                }
             }
         }
     }

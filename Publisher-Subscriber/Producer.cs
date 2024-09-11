@@ -3,16 +3,16 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Systemintegration.Messaging
+namespace ETA_Messages
 {
     public class Producer
     {
-        private readonly string _queueName;
+        private readonly string _exchangeName;
         private readonly IConnection _connection;
 
-        public Producer(string queueName, IConnection connection)
+        public Producer(string exchangeName, IConnection connection)
         {
-            _queueName = queueName;
+            _exchangeName = exchangeName;
             _connection = connection;
         }
 
@@ -20,16 +20,12 @@ namespace Systemintegration.Messaging
         {
             using (var channel = _connection.CreateModel())
             {
-                channel.QueueDeclare(queue: _queueName,
-                    durable: false,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
+                channel.ExchangeDeclare(exchange: _exchangeName, type: "fanout");
 
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-                channel.BasicPublish(exchange: "",
-                    routingKey: _queueName,
+                channel.BasicPublish(exchange: _exchangeName,
+                    routingKey: "",
                     basicProperties: null,
                     body: body);
 

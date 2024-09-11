@@ -13,21 +13,20 @@ namespace Systemintegration.Messaging
         private readonly string _outputQueueName1;
         private readonly string _outputQueueName2;
         private readonly string _outputQueueName3;
+        private readonly IConnection _connection;
 
-        public SimpleRouter(string inputQueueName, string outputQueueName1, string outputQueueName2, string outputQueueName3)
+        public SimpleRouter(string inputQueueName, string outputQueueName1, string outputQueueName2, string outputQueueName3, IConnection connection)
         {
             _inputQueueName = inputQueueName;
             _outputQueueName1 = outputQueueName1;
             _outputQueueName2 = outputQueueName2;
             _outputQueueName3 = outputQueueName3;
+            _connection = connection;
         }
 
         public async Task RouteMessages()
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            using (var channel = _connection.CreateModel())
             {
                 channel.QueueDeclare(queue: _inputQueueName,
                     durable: false,
@@ -43,11 +42,11 @@ namespace Systemintegration.Messaging
                     var deserializedMessage = JObject.Parse(message);
                     var receiver = deserializedMessage["Header"]["Receiver"].ToString();
 
-                    if (receiver == "Scandinavian Airline Service")
+                    if (receiver == "SAS")
                     {
                         SendMessageToQueue(_outputQueueName1, message);
                     }
-                    else if (receiver == "South West Airlines")
+                    else if (receiver == "SWA")
                     {
                         SendMessageToQueue(_outputQueueName2, message);
                     }
@@ -71,10 +70,7 @@ namespace Systemintegration.Messaging
 
         private void SendMessageToQueue(string queueName, string message)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            using (var channel = _connection.CreateModel())
             {
                 channel.QueueDeclare(queue: queueName,
                     durable: false,

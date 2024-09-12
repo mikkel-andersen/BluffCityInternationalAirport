@@ -71,7 +71,7 @@ namespace Systemintegration
                 var consumerSWA = new Consumer("SWAQueue", connection);
                 var consumerKLM = new Consumer("KLMQueue", connection);
 
-                await Task.WhenAll(consumerSAS.ReceiveMessages(), consumerSWA.ReceiveMessages(), consumerKLM.ReceiveMessages());
+                //await Task.WhenAll(consumerSAS.ReceiveMessages(), consumerSWA.ReceiveMessages(), consumerKLM.ReceiveMessages());
             }
         }
     }

@@ -5,12 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Systemintegration</RootNamespace>
-        <UserSecretsId>ebc58844-38a1-492c-82b3-d184d00bcbcc</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="EPPlus" Version="7.3.2" />
+      <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
       <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
     </ItemGroup>
 

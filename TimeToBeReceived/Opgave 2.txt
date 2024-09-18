@@ -1,0 +1,8 @@
+Opgave 2
+Prøv at lave lidt research - har andre Message Queue systemer en lignende property i headeren?
+Hvilke?
+
+- RabbitMQ har expiration når man sender
+        producer.SendMessage("Test Message", 5000); 5000 er TTL i millisekunder
+        
+- MSMQ har timespan

@@ -22,9 +22,9 @@ namespace TimeToBeReceived
                 // Send multiple messages
                 var messages = new[]
                 {
-                    "Flight123,2023-10-01T10:00:00",
-                    "Flight456,2023-10-01T12:00:00",
-                    "Flight789,2023-10-01T14:00:00"
+                    "SAS3732,2023-10-01T10:00:00",
+                    "KLM1456,2023-10-01T12:00:00",
+                    "SW4789,2023-10-01T14:00:00"
                 };
 
                 foreach (var message in messages)

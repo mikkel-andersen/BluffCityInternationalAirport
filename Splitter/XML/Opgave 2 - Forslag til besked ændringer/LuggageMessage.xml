@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LuggageMessage>
+    <MessageId>1</MessageId>
+    <SequenceNumber>2</SequenceNumber>
+    <Luggage>
+        <Id>CA937200305252</Id>
+        <Identification>1</Identification>
+        <Category>Normal</Category>
+        <Weight>17.3</Weight>
+    </Luggage>
+</LuggageMessage>

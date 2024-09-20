@@ -72,6 +72,8 @@ namespace Adapter
 
                     package.Save();
                 }
+                // Open the Excel file
+                System.Diagnostics.Process.Start("open", filePath);
             }
             catch (Exception ex)
             {

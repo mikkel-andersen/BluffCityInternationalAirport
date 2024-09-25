@@ -11,6 +11,7 @@ namespace MiniProjekt
         private readonly IModel _channel;
         private readonly string _outputQueue;
         private readonly ConcurrentDictionary<int, string> _messages = new ConcurrentDictionary<int, string>();
+        private int _totalSequences = 0;
 
         public Resequencer(IModel channel, string outputQueue)
         {
@@ -18,11 +19,13 @@ namespace MiniProjekt
             _outputQueue = outputQueue;
         }
 
-        public void AddMessage(int sequenceNumber, string message)
+        public void AddMessage(int sequenceNumber, int totalSequences, string message)
         {
             _messages[sequenceNumber] = message;
+            _totalSequences = totalSequences;
             Console.WriteLine("Message added with sequence number: {0}", sequenceNumber);
-            if (_messages.Count >= 3) // Baseret på at XML filen deles i 3.
+
+            if (_messages.Count >= _totalSequences)
             {
                 SendOrderedMessages();
             }
@@ -38,6 +41,7 @@ namespace MiniProjekt
                     _channel.BasicPublish(exchange: "", routingKey: _outputQueue, basicProperties: null, body: body);
                 }
                 Console.WriteLine("Ordered messages sent to {0}", _outputQueue);
+                _messages.Clear();
             }
             catch (Exception ex)
             {

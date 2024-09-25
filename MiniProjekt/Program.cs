@@ -21,10 +21,8 @@ namespace MiniProjekt
 
             var producer = new Producer(channel, personalInfoQueue, luggageQueue);
             // Sti til hvor XML filen er gemt
-            producer.SendMessages("/Users/mikkel/Documents/Datamatiker" +
-                                  "/4. semester/Systemintegration/Systemintegration/MiniProjekt/FlightDetailsInfoResponse.xml");
-            
-            //producer.SendMessages("/Users/mikkel/Documents/Datamatiker/4. semester/Systemintegration/Systemintegration/MiniProjekt/FlightDetails2.xml");
+            producer.SendMessages("/Users/mikkel/Documents/Datamatiker/4. semester/" +
+                                  "Systemintegration/Systemintegration/MiniProjekt/FlightDetailsInfoResponse.xml");
 
             var resequencer = new Resequencer(channel, outputQueue);
 

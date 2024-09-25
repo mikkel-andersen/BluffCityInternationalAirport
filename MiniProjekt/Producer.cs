@@ -18,40 +18,40 @@ namespace MiniProjekt
             _luggageQueue = luggageQueue;
         }
 
-        public void SendMessages(string filePath) // Hardcoded løsning
+        public void SendMessages(string filePath)
         {
             XElement flightDetails = XElement.Load(filePath);
             string messageId = Guid.NewGuid().ToString();
 
+            // Beregn antal sequences der sendes
+            int totalSequences = 1 + flightDetails.Elements("Luggage").Count();
+
             // Send personal info
             var personalInfo = new XElement("PersonalInfoMessage",
                 new XElement("MessageId", messageId),
-                new XElement("SequenceNumber", 1), // Tilføjer et sequence nummer  til XML'en
+                new XElement("SequenceNumber", 1),
+                new XElement("TotalSequences", totalSequences),
                 flightDetails.Element("Flight"),
                 flightDetails.Element("Passenger"));
             SendMessage(_personalInfoQueue, personalInfo.ToString());
 
             // Send luggage info
-            var luggageElements = flightDetails.Elements("Luggage");
-            int sequenceNumber = 2; // Sequence nummer 2 fordi nummer 1 er givet til person.
-            foreach (var luggage in luggageElements)
+            int sequenceNumber = 2;
+            foreach (var luggage in flightDetails.Elements("Luggage"))
             {
                 var luggageInfo = new XElement("LuggageMessage",
                     new XElement("MessageId", messageId),
                     new XElement("SequenceNumber", sequenceNumber++),
+                    new XElement("TotalSequences", totalSequences),
                     luggage);
-                string luggageKey = sequenceNumber == 3 ? "LuggageInfo1" : "LuggageInfo2";
-                SendMessage(_luggageQueue, luggageInfo.ToString(), luggageKey);
+                SendMessage(_luggageQueue, luggageInfo.ToString());
             }
         }
 
-        private void SendMessage(string queueName, string messageBody, string luggageKey = null)
+        private void SendMessage(string queueName, string messageBody)
         {
             var body = Encoding.UTF8.GetBytes(messageBody);
-            var properties = _channel.CreateBasicProperties();
-            properties.Headers = new Dictionary<string, object> { { "LuggageKey", luggageKey } };
-
-            _channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: properties, body: body);
+            _channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
             Console.WriteLine("Message sent to {0}", queueName);
         }
     }

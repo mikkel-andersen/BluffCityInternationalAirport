@@ -28,9 +28,10 @@ namespace MiniProjekt
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                var sequenceNumber = int.Parse(XElement.Parse(message).Element("SequenceNumber").Value);
-                _resequencer.AddMessage(sequenceNumber, message);
-                //Console.WriteLine("Received PersonalInfo message with sequence number {0}: {1}", sequenceNumber, message);
+                var xmlMessage = XElement.Parse(message);
+                var sequenceNumber = int.Parse(xmlMessage.Element("SequenceNumber").Value);
+                var totalSequences = int.Parse(xmlMessage.Element("TotalSequences").Value);
+                _resequencer.AddMessage(sequenceNumber, totalSequences, message);
             };
             _channel.BasicConsume(queue: _personalInfoQueue, autoAck: true, consumer: personalInfoConsumer);
 
@@ -39,9 +40,10 @@ namespace MiniProjekt
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                var sequenceNumber = int.Parse(XElement.Parse(message).Element("SequenceNumber").Value);
-                _resequencer.AddMessage(sequenceNumber, message);
-                //Console.WriteLine("Received Luggage message with sequence number {0}: {1}", sequenceNumber, message);
+                var xmlMessage = XElement.Parse(message);
+                var sequenceNumber = int.Parse(xmlMessage.Element("SequenceNumber").Value);
+                var totalSequences = int.Parse(xmlMessage.Element("TotalSequences").Value);
+                _resequencer.AddMessage(sequenceNumber, totalSequences, message);
             };
             _channel.BasicConsume(queue: _luggageQueue, autoAck: true, consumer: luggageConsumer);
         }
